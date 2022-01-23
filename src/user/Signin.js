@@ -1,15 +1,15 @@
 import React, { Component } from "react";
+import { Navigate } from "react-router-dom";
 
 class Signin extends Component {
   constructor() {
     super();
     this.state = {
-      
       email: "",
       password: "",
-        error: "",
-      redirectToReferer: false
-     
+      error: "",
+      redirectToReferer: false,
+      loading: false,
     };
   }
 
@@ -17,21 +17,31 @@ class Signin extends Component {
     this.setState({ error: "" });
     this.setState({ [name]: event.target.value });
   };
+  authenticate(jwt, next) {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("jwt", JSON.stringify(jwt));
+      next();
+    }
+  }
+
   clickSubmit = (event) => {
+    this.setState({ loading: true });
+
     event.preventDefault();
-    const {  email, password } = this.state;
+    const { email, password } = this.state;
     const user = {
-     
       email,
       password,
     };
-    console.log(user );
+    // console.log(user );
     this.signin(user).then((data) => {
-      if (data.error) {this.setState({ error: data.error });}
-      else
-      {
-          //authrnticate
-          //redirect
+      if (data.error) {
+        this.setState({ error: data.error, loading: false });
+      } else {
+        //authrnticate
+        this.authenticate(data, () => {
+          this.setState({ redirectToReferer: true });
+        });
       }
     });
   };
@@ -41,8 +51,8 @@ class Signin extends Component {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        },
-      
+      },
+
       body: JSON.stringify(user),
     })
       .then((response) => {
@@ -53,8 +63,6 @@ class Signin extends Component {
   };
   signinForm = (email, password) => (
     <form>
-      
-      
       <div className="form-group">
         <label className="text-muted">Email</label>
         <input
@@ -80,7 +88,10 @@ class Signin extends Component {
   );
 
   render() {
-    const {  email, password, error, } = this.state;
+    const { email, password, error, redirectToReferer, loading } = this.state;
+    if (redirectToReferer) {
+      return <Navigate to="/" />;
+    }
     return (
       <div className="container">
         <h2 className="mt-5 mb-5">Signin</h2>
@@ -90,8 +101,15 @@ class Signin extends Component {
         >
           {error}
         </div>
-        
-        {this.signinForm( email, password)}
+        {loading ? (
+          <div className="jumbotron text-center ">
+            <h2>loading</h2>
+          </div>
+        ) : (
+          ""
+        )}
+
+        {this.signinForm(email, password)}
       </div>
     );
   }
