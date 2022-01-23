@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Navigate } from "react-router-dom";
+import {  Redirect } from "react-router-dom";
 
 class Signin extends Component {
   constructor() {
@@ -90,7 +90,7 @@ class Signin extends Component {
   render() {
     const { email, password, error, redirectToReferer, loading } = this.state;
     if (redirectToReferer) {
-      return <Navigate to="/" />;
+      return <Redirect to="/" />;
     }
     return (
       <div className="container">
