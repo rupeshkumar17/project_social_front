@@ -9,7 +9,6 @@ const isActive = (history, path) => {
   else return { color: "#ffffff" };
 };
 
-
 const Menu = ({ history }) => {
   return (
     <div>
@@ -57,7 +56,13 @@ const Menu = ({ history }) => {
               </a>
             </li>
             <li className="nav-item">
-              <a className="nav-link">{isAuthenticated().user.name}</a>
+              <Link
+                to={`/user/${isAuthenticated().user._id}`}
+                style={{ color: "white" }}
+                className="nav-link"
+              >
+                {`${isAuthenticated().user.name}'profile `}
+              </Link>
             </li>
           </>
         )}
