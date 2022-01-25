@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
+
 import { Link, withRouter } from "react-router-dom";
 import { signout, isAuthenticated } from "../auth/index";
 const isActive = (history, path) => {
@@ -16,6 +16,15 @@ const Menu = ({ history }) => {
         <li className="nav-item">
           <Link className="nav-link" style={isActive(history, "/")} to="/">
             Home
+          </Link>
+        </li>
+        <li className="nav-item">
+          <Link
+            className="nav-link"
+            style={isActive(history, "/users")}
+            to="/users"
+          >
+            Users
           </Link>
         </li>
         {!isAuthenticated() && (
@@ -43,9 +52,8 @@ const Menu = ({ history }) => {
         {isAuthenticated() && (
           <>
             <li className="nav-item">
-              <a
+              <span
                 className="nav-link"
-                // eslint-disable-next-line no-sequences
                 style={
                   (isActive(history, "/signup"),
                   { cursor: "pointer", color: "white" })
@@ -53,15 +61,12 @@ const Menu = ({ history }) => {
                 onClick={() => signout(() => history.push("/"))}
               >
                 Sign Out
-              </a>
+              </span>
             </li>
             <li className="nav-item">
               <Link
                 to={`/user/${isAuthenticated().user._id}`}
-                style={
-                  (isActive(history, `/user/${isAuthenticated().user._id}`)
-                  )
-                }
+                style={isActive(history, `/user/${isAuthenticated().user._id}`)}
                 className="nav-link"
               >
                 {`${isAuthenticated().user.name}'profile `}
