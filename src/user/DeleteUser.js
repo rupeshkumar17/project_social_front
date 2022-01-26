@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import { isAuthenticated } from "../auth/index";
-import { remove } from "./apiUser";
-import { signout } from "../auth/index";
-import { Redirect } from "react-router-dom";
+import React, { Component } from 'react';
+import { isAuthenticated } from '../auth/index';
+import { remove } from './apiUser';
+import { signout } from '../auth/index';
+import { Redirect } from 'react-router-dom';
 class DeleteUser extends Component {
   state = { redirect: false };
   deleteAccount = () => {
@@ -15,7 +15,7 @@ class DeleteUser extends Component {
       } else {
         //signout user
         signout(() => {
-          console.log("user is deleted");
+          console.log('user is deleted');
         });
         //redirect
         this.setState({ redirect: true });
@@ -25,7 +25,7 @@ class DeleteUser extends Component {
 
   deleteConfirmed = () => {
     let answer = window.confirm(
-      "Are you sure you want to delete Your account? "
+      'Are you sure you want to delete Your account? '
     );
     if (answer) {
       this.deleteAccount();
@@ -34,12 +34,12 @@ class DeleteUser extends Component {
 
   render() {
     if (this.state.redirect) {
-      return <Redirect to="/" />; 
+      return <Redirect to='/' />;
     }
     return (
       <button
         onClick={this.deleteConfirmed}
-        className="btn btn-raised btn-danger"
+        className='btn btn-raised btn-danger'
       >
         Delete Profile
       </button>
