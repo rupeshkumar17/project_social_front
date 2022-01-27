@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { isAuthenticated } from '../auth/index';
 import { read, update } from './apiUser';
 import { Redirect } from 'react-router-dom';
-// import DefaultProfile from '../images/avatar.jpg';
+import DefaultProfile from '../images/avatar.jpg';
 
 class EditProfile extends Component {
   constructor() {
@@ -151,9 +151,9 @@ class EditProfile extends Component {
       return <Redirect to={`/user/${id}`} />;
     }
 
-    // const photoUrl = id
-    //   ? `${process.env.REACT_APP_API_URL}/user/photo/${id}`
-    //   : DefaultProfile;
+    const photoUrl = id
+      ? `${process.env.REACT_APP_API_URL}/user/photo/${id}`
+      : DefaultProfile;
     return (
       <div>
         <div className='container'>
@@ -171,7 +171,7 @@ class EditProfile extends Component {
           ) : (
             ''
           )}
-          {/* <img src={photoUrl} alt={name} /> */}
+          <img src={photoUrl} alt={name} />
           {this.signupForm(name, email, password)}
         </div>
       </div>
