@@ -30,7 +30,7 @@ class Users extends Component {
           />
           <div className='card-body'>
             <h5 className='card-title'>{user.name}</h5>
-
+ 
             <p className='card-text'>{user.email}</p>
             <Link
               to={`/user/${user._id}`}

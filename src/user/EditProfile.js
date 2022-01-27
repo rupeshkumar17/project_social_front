@@ -199,7 +199,7 @@ class EditProfile extends Component {
             style={{ height: '200px', width: 'auto' }}
             className='img-thumbnail'
             src={photoUrl}
-            onError={(i) => (i.target.src = `${DefaultProfile}`)}
+            onError={i => (i.target.src = `${DefaultProfile}`)}
             alt={name}
           />
           {this.signupForm(name, email, password, about)}
