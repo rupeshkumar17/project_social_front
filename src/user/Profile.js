@@ -38,6 +38,11 @@ class Profile extends Component {
     if (redirectToSignin) {
       return <Redirect to='/signin' />;
     }
+      const photoUrl = user._id
+        ? `${process.env.REACT_APP_API_URL}/user/photo/${
+            user._id
+          }?${new Date().getTime()}`
+        : DefaultProfile;
 
     return (
       <div className='container'>
@@ -46,10 +51,11 @@ class Profile extends Component {
         <div className='row'>
           <div className='col-md-6'>
             <img
-              src={DefaultProfile}
-              className='card-img-top'
+              style={{ height: '200px', width: 'auto' }}
+              className='img-thumbnail'
+              src={photoUrl}
+              onError={(i) => (i.target.src = `${DefaultProfile}`)}
               alt={user.name}
-              style={{ width: '100', height: '14vw', objectFit: 'cover' }}
             />
           </div>
           <div className='col-md-6'>
@@ -58,8 +64,7 @@ class Profile extends Component {
               <p> Email: {user.email} </p>
               <p>{`Joined ${new Date(user.created).toDateString()}`}</p>
             </div>
-            {isAuthenticated().user &&
-              isAuthenticated().user._id === user._id && (
+            {isAuthenticated().user && isAuthenticated().user._id === user._id && (
               <div className='d-inline-block'>
                 <Link
                   className='btn btn-raised btn-success mr-5'
@@ -70,6 +75,13 @@ class Profile extends Component {
                 <DeleteUser userId={user._id} />
               </div>
             )}
+          </div>
+        </div>
+        <div className="row">
+          <div className="col md-12 mt-5 mb-5">
+            <hr />
+            <p>{user.about}</p>
+            <hr />
           </div>
         </div>
       </div>

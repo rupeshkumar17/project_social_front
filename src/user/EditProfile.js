@@ -1,7 +1,7 @@
 /* eslint-disable no-useless-escape */
 import React, { Component } from 'react';
 import { isAuthenticated } from '../auth/index';
-import { read, update } from './apiUser';
+import { read, update, updateUser } from './apiUser';
 import { Redirect } from 'react-router-dom';
 import DefaultProfile from '../images/avatar.jpg';
 
@@ -17,6 +17,7 @@ class EditProfile extends Component {
       error: '',
       fileSize: 0,
       loading: false,
+      about: '',
     };
   }
 
@@ -31,6 +32,7 @@ class EditProfile extends Component {
           name: data.name,
           email: data.email,
           error: '',
+          about: data.about,
         });
       }
     });
@@ -74,7 +76,8 @@ class EditProfile extends Component {
   handleChange = (name) => (event) => {
     this.setState({ error: '' });
     // this.setState({ error: '' });
-    const value = name === 'photo' ? event.target?.files[0] : event.target.value;
+    const value =
+      name === 'photo' ? event.target?.files[0] : event.target.value;
     const fileSize = name === 'photo' ? event.target.files[0].size : 0;
     this.userData.set(name, value);
     this.setState({ [name]: value, fileSize });
@@ -90,15 +93,17 @@ class EditProfile extends Component {
 
       update(userId, token, this.userData).then((data) => {
         if (data.error) this.setState({ error: data.error });
-        else
-          this.setState({
-            redirectToProfile: true,
-          });
+        else updateUser(data, () => {
+         this.setState({
+           redirectToProfile: true,
+         });
+        })
+        
       });
     }
   };
 
-  signupForm = (name, email, password) => (
+  signupForm = (name, email, password, about) => (
     <form>
       <div className='form-group'>
         <label className='text-muted'>Profile Photo</label>
@@ -130,6 +135,15 @@ class EditProfile extends Component {
         />
       </div>
       <div className='form-group'>
+        <label className='text-muted'>About</label>
+        <textarea
+          onChange={this.handleChange('about')}
+          type='text'
+          className='form-control'
+          value={about}
+        />
+      </div>
+      <div className='form-group'>
         <label className='text-muted'>Password</label>
         <input
           onChange={this.handleChange('password')}
@@ -145,14 +159,24 @@ class EditProfile extends Component {
   );
 
   render() {
-    const { id, name, email, password, redirectToProfile, error, loading } =
-      this.state;
+    const {
+      id,
+      name,
+      email,
+      password,
+      redirectToProfile,
+      error,
+      loading,
+      about,
+    } = this.state;
     if (redirectToProfile) {
       return <Redirect to={`/user/${id}`} />;
     }
 
     const photoUrl = id
-      ? `${process.env.REACT_APP_API_URL}/user/photo/${id}`
+      ? `${
+          process.env.REACT_APP_API_URL
+        }/user/photo/${id}?${new Date().getTime()}`
       : DefaultProfile;
     return (
       <div>
@@ -171,8 +195,14 @@ class EditProfile extends Component {
           ) : (
             ''
           )}
-          <img src={photoUrl} alt={name} />
-          {this.signupForm(name, email, password)}
+          <img
+            style={{ height: '200px', width: 'auto' }}
+            className='img-thumbnail'
+            src={photoUrl}
+            onError={(i) => (i.target.src = `${DefaultProfile}`)}
+            alt={name}
+          />
+          {this.signupForm(name, email, password, about)}
         </div>
       </div>
     );
