@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import { isAuthenticated } from '../auth/index';
 import { read, update } from './apiUser';
 import { Redirect } from 'react-router-dom';
+// import DefaultProfile from '../images/avatar.jpg';
+
 class EditProfile extends Component {
   constructor() {
     super();
@@ -40,7 +42,14 @@ class EditProfile extends Component {
     this.init(userId);
   }
   isValid = () => {
-    const { name, email, password } = this.state;
+    const { name, email, password, fileSize } = this.state;
+    if (fileSize > 100000) {
+      this.setState({
+        error: 'File Size Should be less than 100kb',
+      });
+      return false;
+    }
+
     if (name.length === 0) {
       this.setState({ error: 'Name is required', loading: false });
       return false;
@@ -63,11 +72,14 @@ class EditProfile extends Component {
     return true;
   };
   handleChange = (name) => (event) => {
+    this.setState({ error: '' });
     // this.setState({ error: '' });
-    const value = name === 'photo' ? event.target.files[0] : event.target.value;
+    const value = name === 'photo' ? event.target?.files[0] : event.target.value;
+    const fileSize = name === 'photo' ? event.target.files[0].size : 0;
     this.userData.set(name, value);
-    this.setState({ [name]: value });
+    this.setState({ [name]: value, fileSize });
   };
+
   clickSubmit = (event) => {
     event.preventDefault();
     this.setState({ loading: true });
@@ -94,6 +106,7 @@ class EditProfile extends Component {
           onChange={this.handleChange('photo')}
           type='file'
           accept='image/*'
+          // accept='.png,.jpg,.jpeg,.gif'
           className='form-control'
         />
       </div>
@@ -138,6 +151,9 @@ class EditProfile extends Component {
       return <Redirect to={`/user/${id}`} />;
     }
 
+    // const photoUrl = id
+    //   ? `${process.env.REACT_APP_API_URL}/user/photo/${id}`
+    //   : DefaultProfile;
     return (
       <div>
         <div className='container'>
@@ -155,6 +171,7 @@ class EditProfile extends Component {
           ) : (
             ''
           )}
+          {/* <img src={photoUrl} alt={name} /> */}
           {this.signupForm(name, email, password)}
         </div>
       </div>

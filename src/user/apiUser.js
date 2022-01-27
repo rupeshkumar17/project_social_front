@@ -16,12 +16,11 @@ export const read = (userId, token) => {
 };
 
 export const update = (userId, token, user) => {
-  console.log('User data update', user);
+  console.log('User data updated', user);
   return fetch(`${process.env.REACT_APP_API_URL}/user/${userId}`, {
     method: 'PUT',
     headers: {
-      Accept: 'application/json',
-
+      // Accept: 'application/json',
       Authorization: `Bearer ${token}`,
     },
     body: user,

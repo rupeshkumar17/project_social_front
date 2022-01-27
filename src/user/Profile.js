@@ -9,7 +9,7 @@ class Profile extends Component {
     super();
     this.state = {
       user: '',
-      redirectTosignin: false,
+      redirectToSignin: false,
     };
   }
 
@@ -17,7 +17,7 @@ class Profile extends Component {
     const token = isAuthenticated().token;
     read(userId, token).then((data) => {
       if (data.error) {
-        this.setState({ redirectTosignin: true });
+        this.setState({ redirectToSignin: true });
       } else {
         this.setState({ user: data });
       }
@@ -34,8 +34,8 @@ class Profile extends Component {
   }
 
   render() {
-    const { redirectTosignin, user } = this.state;
-    if (redirectTosignin) {
+    const { redirectToSignin, user } = this.state;
+    if (redirectToSignin) {
       return <Redirect to='/signin' />;
     }
 
@@ -58,7 +58,8 @@ class Profile extends Component {
               <p> Email: {user.email} </p>
               <p>{`Joined ${new Date(user.created).toDateString()}`}</p>
             </div>
-            {isAuthenticated().user && isAuthenticated().user._id === user._id && (
+            {isAuthenticated().user &&
+              isAuthenticated().user._id === user._id && (
               <div className='d-inline-block'>
                 <Link
                   className='btn btn-raised btn-success mr-5'
