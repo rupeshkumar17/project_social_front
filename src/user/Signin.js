@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import { signin, authenticate } from '../auth/index';
+import SocialLogin from './SocialLogin';
 class Signin extends Component {
   constructor() {
     super();
@@ -74,6 +75,12 @@ class Signin extends Component {
     return (
       <div className='container'>
         <h2 className='mt-5 mb-5'>Signin</h2>
+        {/* <h2 className='mt-5 mb-5'>Sign In</h2> */}
+
+        <hr />
+        <SocialLogin />
+        <hr />
+        <h2 className='mt-5 mb-5'>Sign In</h2>
         <div
           className='alert alert-danger'
           style={{ display: error ? '' : 'none' }}
@@ -87,7 +94,6 @@ class Signin extends Component {
         ) : (
           ''
         )}
-
         {this.signinForm(email, password)}
         <p>
           <Link to='/forgot-password' className='text-danger'>
