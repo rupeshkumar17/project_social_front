@@ -1,6 +1,8 @@
 import React from 'react';
 import Home from './core/Home';
 import Menu from './core/Menu';
+import ForgotPassword from './user/ForgotPassword';
+import ResetPassword from './user/ResetPassword';
 import { Route, Switch } from 'react-router-dom';
 import Signup from '../src/user/Signup';
 import Signin from '../src/user/Signin';
@@ -11,13 +13,20 @@ import FindPeople from './user/FindPeople';
 import NewPost from './post/NewPost';
 import PrivateRoute from './auth/PrivateRoute';
 import SinglePost from './post/SinglePost';
-import EditPost from './post/EditPost'
+import EditPost from './post/EditPost';
 const MainRouter = () => {
   return (
     <div>
       <Menu />
       <Switch>
         <Route exact path='/' component={Home} />
+        <Route exact path='/forgot-password' component={ForgotPassword} />
+        <Route
+          exact
+          path='/reset-password/:resetPasswordToken'
+          component={ResetPassword}
+        />
+
         <PrivateRoute exact path='/post/create' component={NewPost} />
         <Route exact path='/post/:postId' component={SinglePost} />
         <PrivateRoute exact path='/post/edit/:postId' component={EditPost} />
